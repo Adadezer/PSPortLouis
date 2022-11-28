@@ -14,11 +14,18 @@ class PerfilPage {
       await this.page.waitForSelector( this.avatarUser );
       await this.page.waitForTimeout( 1000 );
 
-      const username =  await this.page.$eval('.vcard-username', el => (
+      const userperfil = await this.page.$eval('.vcard-fullname', el => (
         el.textContent.replace(".", "").trim().toLowerCase()
       ));
 
-      return username;
+      await this.page.waitForTimeout( 1000 );
+
+      const userlogin =  await this.page.$eval('.vcard-username', el => (
+        el.textContent.replace(".", "").trim().toLowerCase()
+      ));
+
+      return {userperfil, userlogin};
+
     } catch ( err ) {
       console.log( chalk.red( 'ERROR => ', err ) );
     }
