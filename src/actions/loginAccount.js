@@ -3,7 +3,6 @@ const chalk = require( 'chalk' );
 class LoginAccount {
   constructor( page ) {
     this.url = "https://www.github.com"
-    this.urlPerfil = `https://www.github.com/${this.usernameField}`
     this.page = page;
     this.loginBtn = '.HeaderMenu-link--sign-in';
     this.loginBody = '#login';
@@ -30,7 +29,9 @@ class LoginAccount {
       await this.page.waitForSelector( '.avatar' );
       await this.page.waitForTimeout( 2000 );
 
-      const userlogin = await this.page.$eval( '.btn-link .css-truncate-target', el =>  el.textContent );
+      const userlogin = await this.page.$eval( '.btn-link .css-truncate-target', el => (
+        el.textContent.toLowerCase()
+      ));
 
       return userlogin;
     } catch ( err ) {

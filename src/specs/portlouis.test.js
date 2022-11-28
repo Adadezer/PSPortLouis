@@ -1,10 +1,12 @@
-let loginAccount =  require('../actions/loginAccount');
 require('dotenv').config();
+let loginAccount =  require('../actions/loginAccount');
+let perfilPage = require('../actions/perfilPage');
 
 jest.setTimeout(60000);
 
 describe('Autenticação básica de teste', () => {
-  let credential;
+  const userNameEnvLower = process.env.USERNAME.toLowerCase();
+
   beforeAll( async () => {
     await page.setViewport( {
       width: 1280,
@@ -13,13 +15,18 @@ describe('Autenticação básica de teste', () => {
     } );
 
     loginAccount = await loginAccount( page );
+    perfilPage = await perfilPage( page, process.env.USERNAME );
   } );
 
   it( 'Deve fazer o login com sucesso', async () => {
     const userLogin = await loginAccount.login( process.env.USERNAME, process.env.PASSWORD );
-    const userName = userLogin.toLowerCase();
-    const userNameEnv = process.env.USERNAME.toLowerCase();
     page.waitForTimeout( 1000 );
-    expect( userNameEnv ).toContain( userName );
+    expect( userNameEnvLower ).toContain( userLogin );
+  } );
+
+  it( 'Deve validar o nome de usuário na página do perfil', async () => {
+    const userPerfil = await perfilPage.perfil();
+    page.waitForTimeout( 1000 );
+    expect( userNameEnvLower ).toContain( userPerfil );
   } );
 } );
