@@ -2,8 +2,8 @@ const chalk = require( 'chalk' );
 
 class LoginAccount {
   constructor( page ) {
-    this.url = "https://www.github.com"
     this.page = page;
+    this.url = "https://www.github.com"
     this.loginBtn = '.HeaderMenu-link--sign-in';
     this.loginBody = '#login';
     this.usernameField = '#login_field';
@@ -35,7 +35,7 @@ class LoginAccount {
 
       return userlogin;
     } catch ( err ) {
-      console.log( chalk.red( 'ERROR => ', err ) );
+      console.error( chalk.red( 'ERROR => ', err ) );
     }
   }
 }

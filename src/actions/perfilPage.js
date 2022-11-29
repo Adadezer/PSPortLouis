@@ -2,8 +2,8 @@ const chalk = require( 'chalk' );
 
 class PerfilPage {
   constructor( page, username ) {
-    this.urlPerfil = `https://www.github.com/${username}`
     this.page = page;
+    this.urlPerfil = `https://www.github.com/${username}`
     this.avatarUser = '.avatar-user';
     this.cardNamePerfil = '.vcard-fullname';
     this.cardNameLogin = '.vcard-username';
@@ -27,9 +27,8 @@ class PerfilPage {
       ));
 
       return {userperfil, userlogin};
-
     } catch ( err ) {
-      console.log( chalk.red( 'ERROR => ', err ) );
+      console.error( chalk.red( 'ERROR => ', err ) );
     }
   }
 }
