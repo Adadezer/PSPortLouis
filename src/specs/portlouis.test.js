@@ -6,7 +6,7 @@ let reposiries = require('../actions/repositories');
 jest.setTimeout(60000);
 
 describe('Autenticação básica de teste', () => {
-  const userLoginEnvLower = process.env.USER_LOGIN.toLowerCase();
+  const emailEnvLower = process.env.EMAIL.toLowerCase();
   const userPerfilEnvLower = process.env.PERFIL_USER_NAME.toLowerCase();
 
   beforeAll( async () => {
@@ -17,21 +17,25 @@ describe('Autenticação básica de teste', () => {
     } );
 
     loginAccount = await loginAccount( page );
-    perfilPage = await perfilPage( page, process.env.USER_LOGIN );
-    reposiries = await reposiries(page, process.env.USER_LOGIN);
+    perfilPage = await perfilPage( page, process.env.EMAIL );
+    reposiries = await reposiries(page, process.env.EMAIL);
   } );
 
   it( 'Deve fazer o login com sucesso', async () => {
-    const userLogin = await loginAccount.login( process.env.USER_LOGIN, process.env.PASSWORD );
+    const userLogin = await loginAccount.login( process.env.EMAIL, process.env.PASSWORD );
     page.waitForTimeout( 1000 );
-    expect( userLoginEnvLower ).toEqual( userLogin );
+    
+    const username = emailEnvLower.split('@')[0];
+    expect( username ).toEqual( userLogin );
   } );
 
   it( 'Deve validar o nome de usuário na página do perfil', async () => {
     const userPerfil = await perfilPage.perfil();
     page.waitForTimeout( 1000 );
     expect( userPerfilEnvLower ).toEqual( userPerfil.userperfil );
-    expect( userLoginEnvLower ).toEqual( userPerfil.userlogin );
+
+    const username = emailEnvLower.split('@')[0];
+    expect( username ).toEqual( userPerfil.userlogin );
   } );
 
   it( 'Deve acessar um repositório, e abrir a aba "pull requests"', async () => {

@@ -1,8 +1,9 @@
 const chalk = require( 'chalk' );
 
 class PerfilPage {
-  constructor( page, username ) {
+  constructor( page, email ) {
     this.page = page;
+    const username = email.split('@')[0];
     this.urlPerfil = `https://www.github.com/${username}`
     this.avatarUser = '.avatar-user';
     this.cardNamePerfil = '.vcard-fullname';
@@ -33,4 +34,4 @@ class PerfilPage {
   }
 }
 
-module.exports = ( page, username ) => new PerfilPage( page, username );
+module.exports = ( page, email ) => new PerfilPage( page, email );

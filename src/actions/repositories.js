@@ -1,8 +1,9 @@
 const chalk = require('chalk');
 
 class Repositories {
-  constructor( page, username ) {
+  constructor( page, email ) {
     this.page = page;
+    const username = email.split('@')[0];
     this.urlPerfil = `https://www.github.com/${username}`;
     this.urlRepositories = `https://www.github.com/${username}?tab=repositories`;
     this.repositorie = '.wb-break-all' 
@@ -40,4 +41,4 @@ class Repositories {
   }
 }
 
-module.exports = ( page, username ) => new Repositories( page, username );
+module.exports = ( page, email ) => new Repositories( page, email );
