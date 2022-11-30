@@ -2,6 +2,7 @@ require('dotenv').config();
 let loginAccount =  require('../actions/loginAccount');
 let perfilPage = require('../actions/perfilPage');
 let reposiries = require('../actions/repositories');
+let logoutAccount = require('../actions/logoutAccount');
 
 jest.setTimeout(60000);
 
@@ -19,6 +20,7 @@ describe('Autenticação básica de teste', () => {
     loginAccount = await loginAccount( page );
     perfilPage = await perfilPage( page, process.env.EMAIL );
     reposiries = await reposiries(page, process.env.EMAIL);
+    logoutAccount = await logoutAccount( page );
   } );
 
   it( 'Deve fazer o login com sucesso', async () => {
@@ -43,4 +45,10 @@ describe('Autenticação básica de teste', () => {
     page.waitForTimeout( 1000 );
     expect( prInRepositorie ).toContain( 'pull request' );
   } );
+
+  it('Deve fazer o logout da conta com sucesso', async () => {
+    const homepage = await logoutAccount.logout();
+    page.waitForTimeout( 1000 );
+    expect( homepage ).toContain( 'sign in' );
+  });
 });
