@@ -1,4 +1,4 @@
-const chalk = require( 'chalk' );
+require('dotenv').config();
 
 class LoginAccount {
   constructor( page ) {
@@ -12,31 +12,34 @@ class LoginAccount {
   }
 
   async login( username, password ) {
-    try {
-      await this.page.goto( this.url );
+    
+    await this.page.goto( this.url );
 
-      await this.page.waitForSelector( this.loginBtn );
-      await this.page.click( this.loginBtn );
-      await this.page.waitForSelector( this.loginBody );
+    await this.page.waitForSelector( this.loginBtn );
+    await this.page.click( this.loginBtn );
+    await this.page.waitForSelector( this.loginBody );
 
-      await this.page.type( this.usernameField, username );
-      await this.page.waitForTimeout( 1000 );
-			
-      await this.page.type( this.passwordField, password );
-      await this.page.waitForTimeout( 1000 );
+    await this.page.type( this.usernameField, username );
+    await this.page.waitForTimeout( 1000 );
+    
+    await this.page.type( this.passwordField, password );
+    await this.page.waitForTimeout( 1000 );
 
-      await this.page.click( this.loginPageBtn );
-      await this.page.waitForSelector( '.avatar' );
-      await this.page.waitForTimeout( 2000 );
+    await this.page.click( this.loginPageBtn );
+    await this.page.waitForTimeout( 1000 );
 
-      const userlogin = await this.page.$eval( '.btn-link .css-truncate-target', el => (
-        el.textContent.toLowerCase()
-      ));
-
-      return userlogin;
-    } catch ( err ) {
-      console.error( chalk.red( 'ERROR => ', err ) );
+    if (username !== process.env.EMAIL || password !== process.env.PASSWORD) {
+      throw new Error('Autenticação falhou');
     }
+    
+    await this.page.waitForSelector( '.avatar' );
+    await this.page.waitForTimeout( 2000 );
+
+    const userlogin = await this.page.$eval( '.btn-link .css-truncate-target', el => (
+      el.textContent.toLowerCase()
+    ));
+
+    return userlogin;
   }
 }
 
