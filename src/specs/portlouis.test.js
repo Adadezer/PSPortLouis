@@ -1,12 +1,13 @@
 require('dotenv').config();
 let loginAccount =  require('../actions/loginAccount');
 let perfilPage = require('../actions/perfilPage');
-let reposiries = require('../actions/repositories');
+let perfilPageError = require('../utils/perfilPageError');
+let repositories = require('../actions/repositories');
 let logoutAccount = require('../actions/logoutAccount');
 
 jest.setTimeout(60000);
 
-describe('Suit de testes PortLouis', () => {
+describe('Suit de testes Portlouis', () => {
   const emailEnvLower = process.env.EMAIL.toLowerCase();
   const userPerfilEnvLower = process.env.PERFIL_USER_NAME.toLowerCase();
 
@@ -19,7 +20,8 @@ describe('Suit de testes PortLouis', () => {
 
     loginAccount = await loginAccount( page );
     perfilPage = await perfilPage( page, process.env.EMAIL );
-    reposiries = await reposiries(page, process.env.EMAIL);
+    perfilPageError = await perfilPageError( page, process.env.EMAIL );
+    repositories = await repositories(page, process.env.EMAIL);
     logoutAccount = await logoutAccount( page );
   } );
 
@@ -37,7 +39,13 @@ describe('Suit de testes PortLouis', () => {
     expect( username ).toEqual( userLogin );
   } );
 
-  it( 'Deve validar o nome de usuário na página do perfil', async () => {
+  it('A página de perfil deve ser mal carregada e o teste apresentar erro', async () => {
+    const userPerfilError = await perfilPageError.perfilError();
+    page.waitForTimeout( 1000 );
+    await expect(() => { userPerfilError }).toThrow('A página não carregou');
+  });
+
+  it( 'Deve validar os nomes de perfil e usuário na página do perfil', async () => {
     const userPerfil = await perfilPage.perfil();
     page.waitForTimeout( 1000 );
     expect( userPerfilEnvLower ).toEqual( userPerfil.userperfil );
@@ -47,7 +55,7 @@ describe('Suit de testes PortLouis', () => {
   } );
 
   it( 'Deve acessar um repositório, e abrir a aba "pull requests"', async () => {
-    const prInRepositorie = await reposiries.repositoriesTab();
+    const prInRepositorie = await repositories.repositoriesTab();
     page.waitForTimeout( 1000 );
     expect( prInRepositorie ).toContain( 'pull request' );
   } );
