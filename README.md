@@ -13,6 +13,7 @@ Na pasta raiz do projeto existe um arquivo chamado `.env.example` que tem um exe
 
 3- Rode os testes e aguarde sua conclusão:
 - `npm run test`
+
 A aplicação abrirá uma janela no navegador e começará a preencher os dados e navegar pela página.
 
 ## 📌 Considerações
