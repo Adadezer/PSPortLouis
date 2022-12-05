@@ -1,44 +1,37 @@
-const chalk = require('chalk');
-
 class Repositories {
-  constructor( page, email ) {
+  constructor( page ) {
     this.page = page;
-    const username = email.split('@')[0];
-    this.urlPerfil = `https://www.github.com/${username}`;
-    this.urlRepositories = `https://www.github.com/${username}?tab=repositories`;
-    this.repositorie = '.wb-break-all' 
+    this.tabRepositories = '.Layout-main a[data-tab-item="repositories"]';
+    this.repositoriesList = '#user-repositories-list';
+    this.repositorie = '.wb-break-all a';
+    this.tabPullRequests = '.js-repo-nav .UnderlineNav-body #pull-requests-tab';
   }
 
   async repositoriesTab () {
-    try {
-      await this.page.goto(this.urlRepositories);
+    await this.page.waitForSelector(this.tabRepositories);
+    await this.page.click(this.tabRepositories);
+    await this.page.waitForTimeout( 1500 );
 
-      await this.page.waitForSelector( `#user-repositories-list` );
-      await this.page.waitForTimeout( 1000 );
+    await this.page.waitForSelector(this.repositoriesList);
+    await this.page.waitForTimeout( 1500 );
 
-      const repo = await page.$eval(`${this.repositorie} a[href]` , el => (
-        el.textContent.trim().toLowerCase()
-      ));
-      
-      const linkRepo = `${this.urlPerfil}/${repo}`;
+    await this.page.waitForSelector(this.repositorie);
+    await this.page.click(this.repositorie);
+    await this.page.waitForTimeout( 1500 );
 
-      await this.page.goto(linkRepo);
-      await this.page.waitForSelector('.Layout-main');
-      await this.page.waitForTimeout( 1000 );
-        
-      await this.page.goto(`${linkRepo}/pulls`);
-      await this.page.waitForSelector('.application-main');
-      await this.page.waitForTimeout( 2000 );
+    await this.page.waitForSelector(this.tabPullRequests);
+    await this.page.click(this.tabPullRequests);
+    await this.page.waitForTimeout( 1500 );
+    
+    await this.page.waitForSelector('.application-main');
+    await this.page.waitForTimeout( 2000 );
 
-      const pullRequests = await page.$eval('.blankslate h3' , el => (
-        el.textContent.trim().toLowerCase()
-      ));
-      
-      return pullRequests;
-    } catch (err) {
-      console.error( chalk.red( 'repositories ERROR => ', err ) );
-    }
+    const pullRequests = await page.$eval('.blankslate h3' , el => (
+      el.textContent.trim().toLowerCase()
+    ));
+    
+    return pullRequests;
   }
 }
 
-module.exports = ( page, email ) => new Repositories( page, email );
+module.exports = ( page ) => new Repositories( page );

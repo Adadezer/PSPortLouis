@@ -1,24 +1,29 @@
-// const chalk = require( 'chalk' );
-
 class PerfilPage {
-  constructor( page, email ) {
+  constructor( page ) {
     this.page = page;
-    const username = email.split('@')[0];
-    this.urlPerfil = `https://www.github.com/${username}`
+    this.headerDropdownAccount = '.js-feature-preview-indicator-container';
+    this.menuProfile = '.dropdown-menu a[data-ga-click="Header, go to profile, text:your profile"]';
     this.avatarUser = '.avatar-user';
     this.cardNamePerfil = '.vcard-fullname';
     this.cardNameLogin = '.vcard-username';
   }
 
   async perfil() {
-    await this.page.goto( this.urlPerfil );
+    await this.page.waitForSelector( this.headerDropdownAccount );
+    await this.page.click( this.headerDropdownAccount );
+    await this.page.waitForTimeout( 1200 );
+    
+    await this.page.waitForSelector( this.menuProfile );
+    await this.page.click( this.menuProfile );
+    await this.page.waitForTimeout( 1200 );
+    
     await this.page.waitForSelector( this.avatarUser );
-    await this.page.waitForTimeout( 1000 );
+    await this.page.waitForTimeout( 1200 );
 
     const userperfil = await this.page.$eval(this.cardNamePerfil, el => (
       el.textContent.replace(".", "").trim().toLowerCase()
     ));
-    await this.page.waitForTimeout( 1000 );
+    await this.page.waitForTimeout( 1200 );
 
     const userlogin =  await this.page.$eval(this.cardNameLogin, el => (
       el.textContent.replace(".", "").trim().toLowerCase()
@@ -28,4 +33,4 @@ class PerfilPage {
   }
 }
 
-module.exports = ( page, email ) => new PerfilPage( page, email );
+module.exports = ( page ) => new PerfilPage( page );
