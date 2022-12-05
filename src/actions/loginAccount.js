@@ -3,7 +3,7 @@ require('dotenv').config();
 class LoginAccount {
   constructor( page ) {
     this.page = page;
-    this.url = "https://www.github.com"
+    this.url = "https://www.github.com";
     this.loginBtn = '.HeaderMenu-link--sign-in';
     this.loginBody = '#login';
     this.usernameField = '#login_field';
@@ -20,10 +20,10 @@ class LoginAccount {
     await this.page.waitForSelector( this.loginBody );
 
     await this.page.type( this.usernameField, username );
-    await this.page.waitForTimeout( 1000 );
+    await this.page.waitForTimeout( 1500 );
     
     await this.page.type( this.passwordField, password );
-    await this.page.waitForTimeout( 1000 );
+    await this.page.waitForTimeout( 1500 );
 
     await this.page.click( this.loginPageBtn );
     await this.page.waitForTimeout( 1000 );
